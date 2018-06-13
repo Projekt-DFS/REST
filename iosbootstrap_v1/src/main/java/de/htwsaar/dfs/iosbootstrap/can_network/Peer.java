@@ -6,36 +6,43 @@ import java.net.URI;
 import java.awt.geom.Point2D;
 
 import java.util.HashMap;
+import java.util.Map;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 import java.util.ArrayList;
 
+import java.net.InetAddress;
 
-import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.server.ResourceConfig;
+import java.net.UnknownHostException;
 
-//import can.Peer;
-
-import java.awt.geom.Point2D;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Thomas Spanier
  *
  */
+@XmlRootElement
 public class Peer {
 	
 	
 	
 	//Variablen
-	private Zone ownZone;
-	private static final int port = 4434;					//TODO temporary
+	public Zone ownZone;
+	public static final int port = 4434;
+	public static final String ip_bootstrap = "192.168.2.100";
+	//TODO temporary
 	// Aktuelle IP-Adresse des Servers
 
-	private  static final String ip_adresse = "127.0.0.1";
+	public  static String ip_adresse;
+	public InetAddress inet;
 	
-	
-	HashMap neighbours = new HashMap();
-	HashMap coordinates = new HashMap();
+	private  HashMap neighbours = new HashMap();
+	public HashMap <Long, Zone> coordinates = new HashMap <Long, Zone>();
     
 
 
@@ -43,27 +50,80 @@ public class Peer {
 	private ArrayList<Integer> neighbourList;				//Fill
 	protected int id;										//TODO useful? for Neighbourlist
 
+	@XmlTransient
+	public Zone getZone() {
+		return ownZone;
+	}
 	
-	
+	//Constructor
+		public Peer(Zone tmpZone) {
+				this.ownZone = tmpZone;
+				
+			 try {
+				this.inet = InetAddress.getLocalHost();
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			 System.out.println(inet.getHostAddress());
+			//ip_adresse = this.inet.toString();
+				
+			
+		}
 	//Constructor
 	/**
 	 * Creates a new Peer in oldPeer's Zone
 	 * @param oldPeer
 	 */
 	public Peer(Peer oldPeer) {
+		try {
+			this.inet = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		oldPeer.splitZone(this);
 		
 	}
+	
+	
 
 	public Peer() {
 			
 		
 	}
 	
+	/**
+	 * 
+	 * @return the local ip-adress of the peer
+	 */
+	public String getIP() {
+		return inet.getHostAddress();
+	}
+	
 	public void createNeighbours() {
 
 	}
 	
+	/**
+	 * Put values in the Hashmap coordinates
+	 * @param key IP-Adresse from the a neighbor of the peer
+	 * @param zone zone-responsibility of the neighbor
+	 */
+	public void createCoordinates(Long key, Zone zone) {
+		coordinates.put(key, zone);
+	}
+	
+	
+	
+	
+
+	
+	/**
+	 * Convert a IP-Address(String) to long
+	 * @param i IP-Address as String 
+	 * @return IP-Adress as long
+	 */	
 	public long ipToLong(String ipAddress) {
 
 		// ipAddressInArray[0] = 192
@@ -88,45 +148,16 @@ public class Peer {
 	}
 		
 	
-		public String longToIp(long i) {
-
-			return ((i >> 24) & 0xFF) + 
-	                   "." + ((i >> 16) & 0xFF) + 
-	                   "." + ((i >> 8) & 0xFF) + 
-	                   "." + (i & 0xFF);
-
-		}
+	/**
+	 * Convert a IP-Address(Long) to String
+	 * @param i IP-Address as Long 
+	 * @return IP-Adress as String
+	 */
+	public String longToIp(long i) {
+		return ((i >> 24) & 0xFF) + "." + ((i >> 16) & 0xFF) + "." + ((i >> 8) & 0xFF) + "." + (i & 0xFF);
+	}
 		
 
-	/**
-	 * TODO Temporary Main function
-	 * Starts a dummy REST
-	 * @param args
-	 * @throws IOException
-	 * @throws InterruptedException
-	 */
-   public static void main( String[] args ) throws IOException, InterruptedException {
-      String baseUrl = ( args.length > 0 ) ? args[0] : "http://"+ip_adresse+":"+port;
-     
-      final HttpServer server = GrizzlyHttpServerFactory.createHttpServer(
-            URI.create( baseUrl ), new ResourceConfig( PeerService.class ), false );
-      Runtime.getRuntime().addShutdownHook( new Thread( new Runnable() {
-    	  @Override
-    	  public void run() {
-    		  server.shutdownNow();
-    	  }
-         } ) );
-      server.start();
-	
-	  System.out.println( String.format( "\nGrizzly-HTTP-Server gestartet mit der URL: %s\n"
-	                                     + "Stoppen des Grizzly-HTTP-Servers mit:      Strg+C\n",
-	                                     baseUrl + PeerService.webContextPath ) );
-	
-	  Thread.currentThread().join();;
-	  
-   }	
-   
-   
    
    //Zone functions
    
@@ -146,6 +177,8 @@ public class Peer {
     */
     public Peer splitZone(Peer newPeer) {
         if (ownZone.isSquare()) {
+        	
+        	
             newPeer.createZone(new Point2D.Double(ownZone.calculateCentrePoint().getX(), ownZone.getBottomRight().getY()), ownZone.getUpperRight());
             ownZone.setZone(ownZone.getBottomLeft(), new Point2D.Double(ownZone.calculateCentrePoint().getX(), ownZone.getUpperLeft().getY()));    
         } else {
@@ -204,12 +237,8 @@ public class Peer {
     		return true;
     	} else {
     		return false;
-    	}
-    	
-    	
-    }
-   
-
+    	}	
+    }    
 }
 
 

@@ -2,116 +2,79 @@
 <class-diagram version="1.2.2" icons="true" automaticImage="JPEG" always-add-relationships="false" 
   generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true" 
   router="FAN">  
-  <class id="1" language="java" name="can_network.UserTest" project="P2P" file="/P2P/src/can_network/UserTest.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="76" y="379"/>    
+  <class id="1" language="java" name="de.htwsaar.dfs.iosbootstrap.service.ImageService" project="iosbootstrap_v1" 
+    file="/iosbootstrap_v1/src/main/java/de/htwsaar/dfs/iosbootstrap/service/ImageService.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="243" width="242" x="6" y="93"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="can_network.Bootstrap" project="P2P" file="/P2P/src/can_network/Bootstrap.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="296" y="75"/>    
+  <class id="2" language="java" name="de.htwsaar.dfs.iosbootstrap.resource.ImageResource" project="iosbootstrap_v1" 
+    file="/iosbootstrap_v1/src/main/java/de/htwsaar/dfs/iosbootstrap/resource/ImageResource.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="212" width="211" x="309" y="298"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="de.htwsaar.dfs.iosbootstrap.model.Image" project="iosbootstrap_v1" 
+    file="/iosbootstrap_v1/src/main/java/de/htwsaar/dfs/iosbootstrap/model/Image.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="315" width="205" x="544" y="-16"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="can_network.Node" project="P2P" file="/P2P/src/can_network/Node.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="677" y="379"/>    
+  <class id="4" language="java" name="de.htwsaar.dfs.iosbootstrap.MyResource" project="iosbootstrap_v1" 
+    file="/iosbootstrap_v1/src/main/java/de/htwsaar/dfs/iosbootstrap/MyResource.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="99" width="126" x="586" y="370"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="can_network.Dialog" project="P2P" file="/P2P/src/can_network/Dialog.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="880" y="524"/>    
+  <class id="5" language="java" name="de.htwsaar.dfs.iosbootstrap.Main" project="iosbootstrap_v1" 
+    file="/iosbootstrap_v1/src/main/java/de/htwsaar/dfs/iosbootstrap/Main.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="144" x="793" y="177"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="can_network.Peer" project="P2P" file="/P2P/src/can_network/Peer.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="873" y="107"/>    
+  <class id="6" language="java" name="de.htwsaar.dfs.iosbootstrap.SecurityFilter" project="iosbootstrap_v1" 
+    file="/iosbootstrap_v1/src/main/java/de/htwsaar/dfs/iosbootstrap/SecurityFilter.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="153" width="233" x="755" y="334"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="can_network.PlayGround" project="P2P" file="/P2P/src/can_network/PlayGround.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="274" y="443"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="7" language="java" name="can_network.PeerService" project="P2P" 
-    file="/P2P/src/can_network/PeerService.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1086" y="90"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="8" language="java" name="can_network.User" project="P2P" file="/P2P/src/can_network/User.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="513" y="430"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <dependency id="9">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="7"/>  
-  </dependency>  
-  <association id="10">    
+  <association id="7">    
     <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="11" name="bt">        
-        <position height="0" width="0" x="157" y="-235"/>      
-      </attribute>      
-      <multiplicity id="12" minimum="0" maximum="1">        
-        <position height="0" width="0" x="157" y="-235"/>      
-      </multiplicity>    
+      <attribute id="8" name="images"/>      
+      <multiplicity id="9" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
+    <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="13">    
+  <association id="10">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="14" name="userList">        
-        <position height="0" width="0" x="143" y="-136"/>      
-      </attribute>      
-      <multiplicity id="15" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="143" y="-136"/>      
-      </multiplicity>    
+      <attribute id="11" name="imageService"/>      
+      <multiplicity id="12" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="16">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="17" name="bt">        
-        <position height="0" width="0" x="157" y="-235"/>      
-      </attribute>      
-      <multiplicity id="18" minimum="0" maximum="1">        
-        <position height="0" width="0" x="157" y="-235"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
+    <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

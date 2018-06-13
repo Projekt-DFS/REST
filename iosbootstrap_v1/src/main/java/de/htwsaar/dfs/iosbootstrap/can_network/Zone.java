@@ -1,19 +1,35 @@
 package de.htwsaar.dfs.iosbootstrap.can_network;
 import java.awt.geom.Point2D;
+import javax.xml.bind.annotation.XmlRootElement;
 
+
+@XmlRootElement
 public class Zone {
-    private Point2D.Double bottomLeft, bottomRight, upperLeft, upperRight;
+    private Point2D.Double bottomLeft, bottomRight, upperLeft, upperRight, center;
     private Interval leftY, rightY, bottomX, upperX;
     
     public Zone() {
     
     }
     
+    //Konstruktor
+    
+    public Zone(Point2D.Double bottomLeft, Point2D.Double bottomRight, Point2D.Double upperLeft, Point2D.Double upperRight) {
+    	this.bottomLeft = bottomLeft;
+    	this.bottomRight = bottomRight;
+    	this.upperLeft = upperLeft;
+    	this.upperRight = upperRight;
+    	this.center = calculateCentrePoint();
+    }
+    
     public void setZone(Point2D.Double bottomLeft, Point2D.Double upperRight) {
         this.bottomLeft = bottomLeft;
         this.upperRight = upperRight;
+        
         calculateRest();
         calculateAxis(bottomLeft, upperRight);
+        
+        this.center = calculateCentrePoint();
     }
     
     public void calculateRest() {
@@ -56,6 +72,21 @@ public class Zone {
     public Point2D.Double getUpperRight() {
         return upperRight;
     }
+    public Point2D.Double getCenter(){
+    	return center;
+    }
+    
+    /**
+     * Calculate the distance between the middle of one zone to a another point
+     * @param x1 x point of the middle of the zone
+     * @param y1 y point of the middle of the zone
+     * @param x2 x point of request point
+     * @param y2 y point of request point
+     * @return distance between the point
+     */
+    public double distanz(double x1, double y1, double x2, double y2){
+    	return Point2D.distanceSq(x1, y1, x2, y2);
+    }
     
     public String toString() {
 		return "bottomLeft: " + bottomLeft + " bottomRight: " + bottomRight + 
@@ -92,7 +123,7 @@ public class Zone {
     public Interval getBottomX() {
     	return bottomX;
     }
-    
+    @XmlRootElement
     public class Interval {
     	private double min;
     	private double max;

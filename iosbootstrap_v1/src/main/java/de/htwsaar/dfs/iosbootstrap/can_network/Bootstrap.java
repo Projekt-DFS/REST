@@ -14,11 +14,14 @@ import java.io.ObjectOutputStream;
 import java.util.*;
 
 import javax.imageio.ImageIO;
+import javax.xml.bind.annotation.XmlRootElement;
+
 
 import de.htwsaar.dfs.iosbootstrap.model.Image;
 import de.htwsaar.dfs.iosbootstrap.model.User;
 import de.htwsaar.dfs.iosbootstrap.utils.StaticFunctions;
 
+@XmlRootElement
 public class Bootstrap extends Peer {
 
 	//Variables
@@ -332,5 +335,13 @@ public class Bootstrap extends Peer {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	/**
+	 *  The sends coordinates Hashmap of the Bootstrap
+	 * @return coordinates
+	 */
+	public HashMap<Long, Zone> getRoutingTbl () {
+		return coordinates;
+		
+	}
 }
