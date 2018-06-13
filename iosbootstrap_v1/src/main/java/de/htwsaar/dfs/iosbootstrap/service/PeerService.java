@@ -102,19 +102,6 @@ public class PeerService {
 			
 		}
 
-	/**
-	 * Send a request to Bootstrap to join a new Peer
-	 * @param newPeer peer-object of the new Peer
-	 */
-	public void join(Peer newPeer) {
-		String webContextPath="getroutingTbl";
-		Client c = ClientBuilder.newClient();
-		String baseUrl = "http://localhost:8080/iosbootstrap/v1/getroutingTbl";
-		WebTarget  target = c.target( baseUrl );
-		tmpPeer.coordinates = (target.path(webContextPath).request().get(HashMap.class));
-/*
-	    ausgabe_ip = (target.path(webContextPath).queryParam("x",x).queryParam("y", y).request( MediaType.TEXT_PLAIN ).get( String.class ));
-	    System.out.println( target.path( webContextPath ));
-	*/	
-	}
+
+
 }

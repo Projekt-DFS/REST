@@ -41,7 +41,7 @@ public class Peer {
 	public  static String ip_adresse;
 	public InetAddress inet;
 	
-	private  HashMap neighbours = new HashMap();
+//	private  HashMap neighbours = new HashMap();
 	public HashMap <Long, Zone> coordinates = new HashMap <Long, Zone>();
     
 
@@ -50,7 +50,7 @@ public class Peer {
 	private ArrayList<Integer> neighbourList;				//Fill
 	protected int id;										//TODO useful? for Neighbourlist
 
-	@XmlTransient
+	
 	public Zone getZone() {
 		return ownZone;
 	}

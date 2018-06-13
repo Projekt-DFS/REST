@@ -7,6 +7,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import de.htwsaar.dfs.iosbootstrap.can_network.Bootstrap;
+import de.htwsaar.dfs.iosbootstrap.resource.*;
 import de.htwsaar.dfs.iosbootstrap.service.UserService;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.net.URI;
  */
 public class Main {
     // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI = "http://localhost:8080/iosbootstrap/v1/";
+    public static final String BASE_URI = "http://192.168.2.100:8080/iosbootstrap/v1/";
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
@@ -29,7 +30,7 @@ public class Main {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in de.htwsaar.dfs.iosbootstrap package
-        final ResourceConfig rc = new ResourceConfig().packages("de.htwsaar.dfs.iosbootstrap.resource");
+        final ResourceConfig rc = new ResourceConfig(BootstrapResource.class);
         rc.register(MultiPartFeature.class);
         rc.register(LoggingFilter.class);
         rc.register(SecurityFilter.class);

@@ -2,21 +2,42 @@ package de.htwsaar.dfs.iosbootstrap.resource;
 
 import java.util.HashMap;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
 import de.htwsaar.dfs.iosbootstrap.can_network.*;
+import de.htwsaar.dfs.iosbootstrap.service.BootstrapService;
 
 @Path("/")
 public class BootstrapResource {
 	
-	private Bootstrap bootstrap = new Bootstrap();
+	private BootstrapService bootstrapService = new BootstrapService();
 	
 	@GET
 	@Path("/getroutingTbl")
 	public HashMap <Long, Zone> getrouting() {
-		return bootstrap.getRoutingTbl();
+		return bootstrapService.getRouting();
 	}
-	
+	@GET
+	@Path("/routing")  
+	public String routing(@QueryParam("x") double x, @QueryParam("y") double y)
+	{
+	 //tmpPeer.checkZone(x, y);
+		return bootstrapService.checkZone(x, y);	 
+	  
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/joinpeers")
+	public Peer joinPeer(@QueryParam("x") double x, @QueryParam("y") double y)
+	{
+		return bootstrapService.joinRequest(x, y);
+	}
 
 }
