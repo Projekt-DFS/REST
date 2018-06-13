@@ -14,30 +14,24 @@ public class Image {
 
 	private long id;
 	private int ownerId;
-	//private Metadata metadata;
+	private String imageName;
+	private Metadata metadata;
 	private String imageSource;
 	private String thumbnailSource;
 		
 	public Image() {}
-	
+
 	//constructor with values
-	public Image(long id, int ownerId, String img ,Metadata metadata, String thmbnailSource) {
+	public Image(long id, int ownerId, String imageName, Metadata metadata, String imageSource,
+			String thumbnailSource) {
+		super();
 		this.id = id;
 		this.ownerId = ownerId;
-		//this.metadata = metadata;
-		this.imageSource = img;
-		this.thumbnailSource = thmbnailSource;
+		this.imageName = imageName;
+		this.metadata = metadata;
+		this.imageSource = imageSource;
+		this.thumbnailSource = thumbnailSource;
 	}
-
-
-	public String getThumbnail() {
-		return thumbnailSource;
-	}
-
-	public void setThumbnail(String thumbnail) {
-		this.thumbnailSource = thumbnail;
-	}
-
 
 	public long getId() {
 		return id;
@@ -47,7 +41,7 @@ public class Image {
 		this.id = id;
 	}
 
-	public long getOwnerId() {
+	public int getOwnerId() {
 		return ownerId;
 	}
 
@@ -55,22 +49,40 @@ public class Image {
 		this.ownerId = ownerId;
 	}
 
-//	@XmlTransient
-//	public Metadata getMetadata() {
-//		return metadata;
-//	}
-//
-//	public void setMetadata(Metadata metadata) {
-//		this.metadata = metadata;
-//	}
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+
+	public Metadata getMetadata() {
+		return metadata;
+	}
+
+	public void setMetadata(Metadata metadata) {
+		this.metadata = metadata;
+	}
 
 	public String getImageSource() {
 		return imageSource;
 	}
 
-	public void setImageSource(String imageSrc) {
-		this.imageSource = imageSrc;
+	public void setImageSource(String imageSource) {
+		this.imageSource = imageSource;
+	}
+
+	public String getThumbnailSource() {
+		return thumbnailSource;
+	}
+
+	public void setThumbnailSource(String thumbnailSource) {
+		this.thumbnailSource = thumbnailSource;
 	}
 	
+	
+	
+
 	
 }

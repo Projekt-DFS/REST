@@ -66,7 +66,7 @@ public class UserResource {
 	 * This method returns all the pictures of a special user
 	 * @return
 	 */
-	@Path("/{imageId}/images")
+	@Path("/{userId}/images")
 	public ImageResource getImageResource( ) {
 		return new ImageResource();
 	}

@@ -258,8 +258,7 @@ public class Bootstrap extends Peer {
 	public void saveImage(ImageContainer ic) throws IOException {
 		//Get location
 		StringBuffer fileName = new StringBuffer();
-		fileName.append("Images//").append(ic.getUser().getName()).append("_")
-				.append(StaticFunctions.pointToString(ic.getCoordinate()));
+		fileName.append("\"C:/Users/Aude/Documents/Studium/Projektarbeit/Bilder/");
 		
 		//Save imageContainer
 		ObjectOutputStream out = new ObjectOutputStream(
