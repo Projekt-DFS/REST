@@ -1,8 +1,18 @@
 package de.htwsaar.dfs.model;
 
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import org.apache.commons.io.output.ThresholdingOutputStream;
+
+import de.htwsaar.dfs.utils.RestUtils;
+import de.htwsaar.dfs.utils.StaticFunctions;
 
 /**
  * This class is used to Parse ImageContainer zu Json with string
@@ -15,22 +25,22 @@ public class Image {
 	private long id;
 	private int ownerId;
 	private String imageName;
-	private Metadata metadata;
+	private Metadata metaData;
 	private String imageSource;
-	private String thumbnailSource;
+	private String thumbnail;
 		
 	public Image() {}
 
 	//constructor with values
-	public Image(long id, int ownerId, String imageName, Metadata metadata, String imageSource,
-			String thumbnailSource) {
+	public Image(long id, int ownerId, String imageName, 
+			Metadata metadata, String imageSource, String thumbnailSource) {
 		super();
 		this.id = id;
 		this.ownerId = ownerId;
 		this.imageName = imageName;
-		this.metadata = metadata;
+		this.metaData = metadata;
 		this.imageSource = imageSource;
-		this.thumbnailSource = thumbnailSource;
+		this.thumbnail = thumbnailSource;//createThumbnail(imageSource);
 	}
 
 	public long getId() {
@@ -57,12 +67,12 @@ public class Image {
 		this.imageName = imageName;
 	}
 
-	public Metadata getMetadata() {
-		return metadata;
+	public Metadata getMetaData() {
+		return metaData;
 	}
 
-	public void setMetadata(Metadata metadata) {
-		this.metadata = metadata;
+	public void setMetaData(Metadata metadata) {
+		this.metaData = metadata;
 	}
 
 	public String getImageSource() {
@@ -73,14 +83,30 @@ public class Image {
 		this.imageSource = imageSource;
 	}
 
-	public String getThumbnailSource() {
-		return thumbnailSource;
+	public String getThumbnail() {
+		return thumbnail;
 	}
 
-	public void setThumbnailSource(String thumbnailSource) {
-		this.thumbnailSource = thumbnailSource;
+	public void setThumbnail(String thumbnailSource) {
+		this.thumbnail = thumbnailSource;
 	}
 	
+	//Thumbnails
+			/**
+			 * creates a Thumbnail and saves it in this object
+			 * @param img the original image
+			 */
+			private String createThumbnail(String imgPath) {
+				BufferedImage img = null;
+				try {
+					img = ImageIO.read(new File(imgPath));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				java.awt.Image temp = img.getScaledInstance(img.getWidth() / 10, img.getHeight() / 10, BufferedImage.SCALE_DEFAULT);
+				String t= RestUtils.encodeToString(StaticFunctions.toBufferedImage(temp), "png");
+			return t;
+			}
 	
 	
 

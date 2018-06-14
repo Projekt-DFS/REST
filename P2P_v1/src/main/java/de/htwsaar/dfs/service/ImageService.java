@@ -19,6 +19,7 @@ import de.htwsaar.dfs.can_network.ImageContainer;
 import de.htwsaar.dfs.model.Image;
 import de.htwsaar.dfs.model.Metadata;
 import de.htwsaar.dfs.model.User;
+import de.htwsaar.dfs.utils.RestUtils;
 
 
 public class ImageService {
@@ -26,7 +27,7 @@ public class ImageService {
 	private Bootstrap bootstrap  = new Bootstrap();
 	//dummy
 	public static Map<Long, Image> images = Database.getImages();
-	public static Map<Long, User> users = Database.getUsers();
+	public static Map<Integer, User> users = Database.getUsers();
 	
 	public ImageService(){
 //		bootstrap.createImage(img, bootstrap.hashToPoint("name", "Nana"), "AN",
@@ -88,9 +89,11 @@ public class ImageService {
 		list.addAll(images.values());
 		List<Image> list2 = new ArrayList<>();
 		for(Image i : list) {
-			if(i.getOwnerId()==userId && i.getId()==imageId)
-				list2.add(i);
+			if(i.getOwnerId()==userId && i.getId()==imageId) {
+			list2.add(i);
+			}
 		}
+		
 		return images.get(imageId);
 	}
 	
@@ -135,7 +138,7 @@ public class ImageService {
 	public Metadata getMetadata(int userId, long imageId) {
 		//ImageContainer ic = bootstrap.getImage(userId, imageId);
 		//Metadata metadata = new Metadata(ic.getUser().getName(), ic.getPhotographer(), ic.getTagList());
-		Metadata metadata = images.get(imageId).getMetadata();
+		Metadata metadata = images.get(imageId).getMetaData();
 		return metadata;
 	}
 
@@ -143,9 +146,9 @@ public class ImageService {
 //		ImageContainer ic = bootstrap.getImage(userId, imageId);
 //		ic.setPhotographer(metadata.getPhotographer());
 		//Metadata metadata = new Metadata(ic.getUser().getName(), ic.getPhotographer(), ic.getTagList());
-		metadata.setCreated(images.get(imageId).getMetadata().getCreated());
+		metadata.setCreated(images.get(imageId).getMetaData().getCreated());
 		//metadata.setOwner(users.get(userId).getName());
-		images.get(imageId).setMetadata(metadata);
+		images.get(imageId).setMetaData(metadata);
 		return metadata;
 	}
 
