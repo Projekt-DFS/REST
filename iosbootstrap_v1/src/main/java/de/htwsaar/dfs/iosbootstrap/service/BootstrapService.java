@@ -9,6 +9,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import java.awt.geom.Point2D;
 
 import de.htwsaar.dfs.iosbootstrap.can_network.*;
 
@@ -74,24 +75,24 @@ public class BootstrapService {
 	 * @throws JsonProcessingException 
 	 */
 	 
-	public Peer joinRequest(double x, double y) {
+	public String joinRequest(double x, double y) {
 		if(x >= bootstrap.ownZone.getBottomLeft().getX() && x <= bootstrap.ownZone.getBottomRight().getX() && y >= bootstrap.ownZone.getBottomRight().getY() && y <= bootstrap.ownZone.getUpperRight().getY()) {
 			ObjectMapper mapper = new ObjectMapper();
 			
 			Peer newPeer = new Peer();
 		
 			newPeer = bootstrap.splitZone(newPeer);
-			
+			String jsonStr ="";
 			try {
-				String jsoanStr = mapper.writeValueAsString(newPeer);
-				Peer result = mapper.readValue(jsoanStr, Peer.class);
+				jsonStr = mapper.writeValueAsString(newPeer);
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}		
 			
+			return jsonStr;
 			
-			return newPeer;
 		} else {
 			
 			String baseUrl ="";
@@ -112,7 +113,7 @@ public class BootstrapService {
 			     Client c = ClientBuilder.newClient();
 			     WebTarget  target = c.target( baseUrl );
 
-			     return (target.path(webContextPath).queryParam("x",x).queryParam("y", y).request( MediaType.TEXT_PLAIN ).get( Peer.class ));
+			     return (target.path(webContextPath).queryParam("x",x).queryParam("y", y).request( MediaType.TEXT_PLAIN ).get( String.class ));
 			     
 	
 			}
@@ -124,11 +125,37 @@ public class BootstrapService {
 	 * @param newPeer peer-object of the new Peer
 	 */
 	public void join(Peer newPeer) {
+		Point2D.Double randomPoint = new Point2D.Double();
+		randomPoint = bootstrap.generateRandomPoint();
+		
 		String webContextPath="getroutingTbl";
 		Client c = ClientBuilder.newClient();
-		String baseUrl = "http://localhost:8080/iosbootstrap/v1/getroutingTbl";
+		String baseUrl = "http://localhost:8080/iosbootstrap/v1/";
 		WebTarget  target = c.target( baseUrl );
 		bootstrap.coordinates = (target.path(webContextPath).request().get(HashMap.class));
+		
+		webContextPath = "joinpeers";
+		Peer generatePeer = new Peer();
+		ObjectMapper mapper = new ObjectMapper();
+		String peerStr ="";
+		peerStr =  (target.path(webContextPath).request().get(String.class));
+		
+		try {
+			generatePeer = mapper.readValue(peerStr, Peer.class);
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
 /*
 	    ausgabe_ip = (target.path(webContextPath).queryParam("x",x).queryParam("y", y).request( MediaType.TEXT_PLAIN ).get( String.class ));
 	    System.out.println( target.path( webContextPath ));

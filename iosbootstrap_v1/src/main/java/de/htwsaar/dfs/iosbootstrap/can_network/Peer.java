@@ -37,8 +37,9 @@ public class Peer {
 	public static final String ip_bootstrap = "192.168.2.100";
 	//TODO temporary
 	// Aktuelle IP-Adresse des Servers
-
+	@XmlTransient
 	public  static String ip_adresse;
+	@XmlTransient
 	public InetAddress inet;
 	
 //	private  HashMap neighbours = new HashMap();
@@ -96,8 +97,12 @@ public class Peer {
 	/**
 	 * 
 	 * @return the local ip-adress of the peer
+	 * @throws UnknownHostException 
 	 */
-	public String getIP() {
+	
+	public String getIP() throws UnknownHostException {
+		
+		this.inet = InetAddress.getLocalHost();
 		return inet.getHostAddress();
 	}
 	

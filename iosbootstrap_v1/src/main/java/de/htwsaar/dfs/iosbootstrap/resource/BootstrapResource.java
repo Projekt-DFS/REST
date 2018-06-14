@@ -35,7 +35,7 @@ public class BootstrapResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/joinpeers")
-	public Peer joinPeer(@QueryParam("x") double x, @QueryParam("y") double y)
+	public String joinPeer(@QueryParam("x") double x, @QueryParam("y") double y)
 	{
 		return bootstrapService.joinRequest(x, y);
 	}

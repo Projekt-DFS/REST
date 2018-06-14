@@ -30,17 +30,16 @@ public class PeerResource {
 	  @Produces(MediaType.APPLICATION_JSON)
 	  @Consumes(MediaType.APPLICATION_JSON)
 	  @Path("/joinpeers")
-	  public Peer joinPeer(@QueryParam("x") double x, @QueryParam("y") double y)
+	  public String joinPeer(@QueryParam("x") double x, @QueryParam("y") double y)
 	  {
 		  return peerService.joinRequest(x, y);
 	  }
-	  /*  @GET
+	  
+	  @GET
 	  @Produces(MediaType.APPLICATION_JSON)
 	  @Consumes(MediaType.APPLICATION_JSON)
-	  @Path("/zone")
-	  public Zone getZone()
-	  {
-		  return PeerServer.testPeer.getZone();
-	  }*/
-
-}
+	  @Path("/join")
+	  public void joinNewPeer() {
+		  peerService.join();
+	  }
+	  }
