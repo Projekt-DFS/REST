@@ -25,7 +25,7 @@ public class Image {
 	private long id;
 	private int ownerId;
 	private String imageName;
-	private Metadata metadata;
+	private Metadata metaData;
 	private String imageSource;
 	private String thumbnail;
 		
@@ -38,7 +38,7 @@ public class Image {
 		this.id = id;
 		this.ownerId = ownerId;
 		this.imageName = imageName;
-		this.metadata = metadata;
+		this.metaData = metadata;
 		this.imageSource = imageSource;
 		this.thumbnail = thumbnailSource;//createThumbnail(imageSource);
 	}
@@ -67,12 +67,12 @@ public class Image {
 		this.imageName = imageName;
 	}
 
-	public Metadata getMetadata() {
-		return metadata;
+	public Metadata getMetaData() {
+		return metaData;
 	}
 
-	public void setMetadata(Metadata metadata) {
-		this.metadata = metadata;
+	public void setMetaData(Metadata metadata) {
+		this.metaData = metadata;
 	}
 
 	public String getImageSource() {

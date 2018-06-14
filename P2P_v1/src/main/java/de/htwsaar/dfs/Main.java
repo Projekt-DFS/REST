@@ -29,8 +29,8 @@ import java.util.Random;
  */
 public class Main {
     // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI =  // "http://192.168.1.5:8080/iosbootstrap/v1/";
-    "http://localhost:8080/iosbootstrap/v1/";
+    public static final String BASE_URI =   "http://localhost:8080/iosbootstrap/v1/";
+   //"http://localhost:8080/iosbootstrap/v1/";
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
      * @return Grizzly HTTP server.
@@ -52,6 +52,7 @@ public class Main {
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
     
+    //just let full the database
     private static void putInDb() {
     	
 		users.put( 1, new User(1, "user", "user"));
@@ -86,7 +87,7 @@ public class Main {
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
         System.in.read();
-       // server.stop();
+      
     }
 }
 

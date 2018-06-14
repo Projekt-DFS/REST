@@ -138,7 +138,7 @@ public class ImageService {
 	public Metadata getMetadata(int userId, long imageId) {
 		//ImageContainer ic = bootstrap.getImage(userId, imageId);
 		//Metadata metadata = new Metadata(ic.getUser().getName(), ic.getPhotographer(), ic.getTagList());
-		Metadata metadata = images.get(imageId).getMetadata();
+		Metadata metadata = images.get(imageId).getMetaData();
 		return metadata;
 	}
 
@@ -146,9 +146,9 @@ public class ImageService {
 //		ImageContainer ic = bootstrap.getImage(userId, imageId);
 //		ic.setPhotographer(metadata.getPhotographer());
 		//Metadata metadata = new Metadata(ic.getUser().getName(), ic.getPhotographer(), ic.getTagList());
-		metadata.setCreated(images.get(imageId).getMetadata().getCreated());
+		metadata.setCreated(images.get(imageId).getMetaData().getCreated());
 		//metadata.setOwner(users.get(userId).getName());
-		images.get(imageId).setMetadata(metadata);
+		images.get(imageId).setMetaData(metadata);
 		return metadata;
 	}
 
