@@ -12,8 +12,13 @@ import de.htwsaar.dfs.model.User;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
+
+
 
 
 /**
@@ -22,7 +27,7 @@ import java.util.Map;
  * @author Aude Nana
  *
  */
-public class IosToBootstrapMain {
+public class Main {
     // Base URI the Grizzly HTTP server will listen on
     public static final String BASE_URI =  // "http://192.168.1.5:8080/iosbootstrap/v1/";
     "http://localhost:8080/iosbootstrap/v1/";
@@ -32,12 +37,12 @@ public class IosToBootstrapMain {
      */
     
     public static Map<Long, Image> images = Database.getImages();
-    public static Map<Long, User> users = Database.getUsers();
+    public static Map<Integer, User> users = Database.getUsers();
 	
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in de.htwsaar.dfs.iosbootstrap package
-        final ResourceConfig rc = new ResourceConfig().packages("de.htwsaar.dfs.iosbootstrap.resource");
+        final ResourceConfig rc = new ResourceConfig().packages("de.htwsaar.dfs.resource");
         rc.register(MultiPartFeature.class);
         rc.register(LoggingFilter.class);
         rc.register(SecurityFilter.class);
@@ -48,24 +53,27 @@ public class IosToBootstrapMain {
     }
     
     private static void putInDb() {
-    	//images
-		Image i = new Image(1, 1, "Noname",
-						new Metadata("nana", new Date(),"nana", null),
-						"C:/Users/Aude/Documents/Studium/Projektarbeit/Bilder/fernbedin.jpg",
-						"C:/Users/Aude/Documents/Studium/Projektarbeit/Bilder/fernbedin.jpg");
-		Image i2 = new Image(2, 2, "pff",
-						new Metadata("nana", new Date(),"nana", null),
-						"C:/Users/Aude/Documents/Studium/Projektarbeit/Bilder/question.jpg",
-					"C:/Users/Aude/Documents/Studium/Projektarbeit/Bilder/question.jpg");
-		images.put(1L, i);
-		images.put(2L,i2);
+    	
+		users.put( 1, new User(1, "user", "user"));
+		users.put( 2, new User(2, "User", "password"));
 		
-		//users
-		users.put( 1L, new User(1, "user", "user"));
-		users.put( 2L, new User(2, "User", "password"));
-
-    }
- 
+		String imgesHttpURL = "https://picsum.photos/1200/300?image=";
+		String thumbnailHttpURL ="https://picsum.photos/200/200?image=";
+	    
+		String[] locations = {"Berlin", "Yaounde", "Milan" , "Paris" , "Saarbrucken"};
+		String[] tags = {"Hochzeit", "Urlaub","Urlaub2017"};
+		for ( long j=1; j<150 ; j++) {
+			int uid = (int)(j%2)+1;
+			LinkedList<String> tagList = new LinkedList<>();
+			tagList.add(tags[(int) (j%tags.length)]);
+			tagList.add(tags[(int) (j  %(tags.length -1))]);
+			Image im = new Image(j, uid, "Bild"+j,
+	    			new Metadata(users.get(uid).getName(), new Date(), 
+	    					locations[(int) (j%locations.length)], tagList), 
+	    			imgesHttpURL+j, thumbnailHttpURL+j);
+	    	images.put(j, im);
+	    }
+			}
     
     /**
      * Main method.
