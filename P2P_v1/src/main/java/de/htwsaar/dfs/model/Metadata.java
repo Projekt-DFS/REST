@@ -20,7 +20,9 @@ public class Metadata {
 	private String location;
 	private LinkedList<String> tagList;
 	
-	public Metadata() {}
+	public Metadata() {
+		this.owner = ""; this.created = new Date(); this.location = ""; this.tagList = new LinkedList<String>();
+	}
 	
 	public Metadata(String owner, Date created,String photographer,LinkedList<String> tagList) {
 		

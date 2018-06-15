@@ -11,7 +11,9 @@ import de.htwsaar.dfs.model.Metadata;
 import de.htwsaar.dfs.model.User;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URI;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
@@ -28,8 +30,10 @@ import java.util.Random;
  *
  */
 public class Main {
+	
+
+
     // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI =   "http://localhost:8080/iosbootstrap/v1/";
    //"http://localhost:8080/iosbootstrap/v1/";
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
@@ -39,17 +43,18 @@ public class Main {
     public static Map<Long, Image> images = Database.getImages();
     public static Map<Integer, User> users = Database.getUsers();
 	
-    public static HttpServer startServer() {
+    public static HttpServer startServer() throws UnknownHostException {
         // create a resource config that scans for JAX-RS resources and providers
         // in de.htwsaar.dfs.iosbootstrap package
         final ResourceConfig rc = new ResourceConfig().packages("de.htwsaar.dfs.resource");
         rc.register(MultiPartFeature.class);
         rc.register(LoggingFilter.class);
         rc.register(SecurityFilter.class);
-        
+
+               
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
-        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+        return GrizzlyHttpServerFactory.createHttpServer(URI.create("http://"+getIP()+":8080/iosbootstrap/v1/"), rc);
     }
     
     //just let full the database
@@ -74,7 +79,11 @@ public class Main {
 	    			imgesHttpURL+j, thumbnailHttpURL+j);
 	    	images.put(j, im);
 	    }
-			}
+	}
+    
+    static public String getIP() throws UnknownHostException {
+    	return InetAddress.getLocalHost().getHostAddress();
+    }
     
     /**
      * Main method.
@@ -84,8 +93,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
     	putInDb();
         startServer();
-        System.out.println(String.format("Jersey app started with WADL available at "
-                + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
+       
         System.in.read();
       
     }

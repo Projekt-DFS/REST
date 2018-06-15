@@ -43,6 +43,7 @@ public class ImageResource {
 	@Produces(MediaType.APPLICATION_JSON )
 	public Image addImage(@PathParam("userId") int userId, Image image) {
 		imageService.addImage(userId, image);
+		System.out.println(image.getImageSource());
 		return image;
 		
 	}

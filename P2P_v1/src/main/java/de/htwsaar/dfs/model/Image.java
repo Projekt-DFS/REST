@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.apache.commons.io.output.ThresholdingOutputStream;
 
 import de.htwsaar.dfs.utils.RestUtils;
 import de.htwsaar.dfs.utils.StaticFunctions;
@@ -29,7 +28,7 @@ public class Image {
 	private String imageSource;
 	private String thumbnail;
 		
-	public Image() {}
+	//public Image() {}
 
 	//constructor with values
 	public Image(long id, int ownerId, String imageName, 
@@ -41,6 +40,10 @@ public class Image {
 		this.metaData = metadata;
 		this.imageSource = imageSource;
 		this.thumbnail = thumbnailSource;//createThumbnail(imageSource);
+	}
+	
+	public Image() {
+		this.id= 0; this.ownerId = 0; this.imageName = ""; this.metaData = new Metadata(); this.imageSource = ""; this.thumbnail = "";
 	}
 
 	public long getId() {
@@ -97,12 +100,12 @@ public class Image {
 			 * @param img the original image
 			 */
 			private String createThumbnail(String imgPath) {
-				BufferedImage img = null;
-				try {
-					img = ImageIO.read(new File(imgPath));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				BufferedImage img = RestUtils.decodeToImage(imgPath);//null;
+//				try {
+//					img = ImageIO.read(new File(imgPath));
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
 				java.awt.Image temp = img.getScaledInstance(img.getWidth() / 10, img.getHeight() / 10, BufferedImage.SCALE_DEFAULT);
 				String t= RestUtils.encodeToString(StaticFunctions.toBufferedImage(temp), "png");
 			return t;

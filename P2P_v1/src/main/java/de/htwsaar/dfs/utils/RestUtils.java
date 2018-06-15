@@ -44,7 +44,6 @@ public class RestUtils {
         BufferedImage image = null;
         byte[] imageByte;
         try {
-          
             imageByte = Base64.getDecoder().decode(imageString);
             ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
             image = ImageIO.read(bis);
@@ -54,4 +53,21 @@ public class RestUtils {
         }
         return image;
     }
+	
+	//Thumbnails
+	/**
+	 * creates a Thumbnail and saves it in this object
+	 * @param img the original image
+	 */
+	public String createThumbnail(String imgPath) {
+		BufferedImage img = RestUtils.decodeToImage(imgPath);//null;
+//		try {
+//			img = ImageIO.read(new File(imgPath));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		java.awt.Image temp = img.getScaledInstance(img.getWidth() / 10, img.getHeight() / 10, BufferedImage.SCALE_DEFAULT);
+		String t= RestUtils.encodeToString(StaticFunctions.toBufferedImage(temp), "png");
+	return t;
+	}
 }

@@ -1,6 +1,7 @@
 package de.htwsaar.dfs;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.function.Predicate;
@@ -80,11 +81,11 @@ public class SecurityFilter implements ContainerRequestFilter {
 	class Authenticator {
 
 		//URL for the request
-	    private String userHttpURL = "http://localhost:8080/iosbootstrap/v1/users";
+	
 	    
-	    public boolean authenticate(String username , String password) {
+	    public boolean authenticate(String username , String password) throws UnknownHostException {
 	    	Client client = ClientBuilder.newClient();
-	    	Response response = client.target(userHttpURL).request().get();
+	    	Response response = client.target("http://"+Main.getIP()+":8080/iosbootstrap/v1/users").request().get();
 	   
 	    	List<User> users =  (List<User>) response.readEntity(new GenericType<List<User>>() {
 	        });

@@ -109,6 +109,7 @@ public class ImageService {
 		}
 		image.setId(i);
 		image.setOwnerId(userId);
+		image.setThumbnail(image.getImageSource().substring(1, 6));
 		images.put(image.getId(), image);
 		return image;
 	}
