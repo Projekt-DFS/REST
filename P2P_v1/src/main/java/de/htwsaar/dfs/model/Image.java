@@ -7,9 +7,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
-import org.apache.commons.io.output.ThresholdingOutputStream;
 
 import de.htwsaar.dfs.utils.RestUtils;
 import de.htwsaar.dfs.utils.StaticFunctions;
