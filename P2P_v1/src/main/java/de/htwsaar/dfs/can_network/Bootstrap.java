@@ -67,6 +67,26 @@ public class Bootstrap extends Peer {
 		createZone(new Point2D.Double(0.0, 0.0), new Point2D.Double(1.0, 1.0));
 	}
 	
+	public ArrayList<User> getUserList() {
+		return userList;
+	}
+
+	public void setUserList(ArrayList<User> userList) {
+		this.userList = userList;
+	}
+
+	public HashSet<String> getImageList() {
+		return imageList;
+	}
+
+	public void setImageList(HashSet<String> imageList) {
+		this.imageList = imageList;
+	}
+
+	public void setUserCount(long userCount) {
+		this.userCount = userCount;
+	}
+
 	public Bootstrap(Zone tmpZone) {
 		super(tmpZone);
 	}

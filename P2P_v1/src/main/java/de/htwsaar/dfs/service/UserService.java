@@ -46,7 +46,7 @@ public class UserService {
 	 * @return
 	 */
 	public User updateUser(User user) {
-		if ( user.getID() <= 0 ) {
+		if ( user.getId() <= 0 ) {
 			return null;
 		}
 		bootstrap.createUser(user.getName(), user.getPassword());

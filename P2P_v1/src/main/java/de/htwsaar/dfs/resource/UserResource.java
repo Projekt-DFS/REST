@@ -56,9 +56,8 @@ public class UserResource {
 	@Path("/{userId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User updateUser(@PathParam("userId") int id ,
-								User user) {
-		user.setID(id);
+	public User updateUser(@PathParam("userId") long id ,User user) {
+		user.setId(id);
 		return userService.updateUser(user);
 	}
 	

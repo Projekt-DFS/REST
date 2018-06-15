@@ -18,6 +18,14 @@ public class User implements Serializable {
 	private static final long serialVersionUID = -3153801662101748013L;
 	//Variables
 	private long id;
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	private String name;
 	private String password;
 	//imageList?
@@ -36,11 +44,7 @@ public class User implements Serializable {
 		setName(name);
 		setPassword(password);
 	}
-	
-	//get-methods
-	public long getID() {
-		return id;
-	}
+
 	
 	public String getName() {
 		return name;

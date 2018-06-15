@@ -35,7 +35,7 @@ public class UserTest {
 	
 	@Test
 	public void testAuthenticate() {
-		assertEquals(1, bt.getUser("Thomas").getID());
+		assertEquals(1, bt.getUser("Thomas").getId());
 		assertEquals(true, bt.authenticateUser("Tommi", "TS"));
 		assertEquals(false, bt.authenticateUser("Thomas", "Pw"));
 		assertEquals(true, bt.authenticateUser("Thomas", "pw"));

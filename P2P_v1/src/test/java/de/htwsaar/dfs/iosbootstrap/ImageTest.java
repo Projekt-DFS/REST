@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -63,7 +64,13 @@ public class ImageTest {
 	@Test
 	public void testImageList() {
 		ArrayList<String> paths = bt.getPaths("user1");
-		String ip = bt.getIP();
+		String ip ="";
+		try {
+			ip = bt.getIP();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println(paths.get(0).toString());
 		assertEquals(1, paths.size());
 		assertEquals("http://" + ip + "//images//user1|img_001", paths.get(0).toString());
