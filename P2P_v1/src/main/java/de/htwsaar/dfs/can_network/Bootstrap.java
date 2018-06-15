@@ -35,7 +35,7 @@ public class Bootstrap extends Peer {
 	 * HashMap: Speichert die Nachbarn vom Peer mit zugehöhrigen Zonen
 	 * 
 	 */
-	private  HashMap <Long, Zone> coordinates = new HashMap <Long, Zone>();
+	//private  HashMap <Long, Zone> coordinates = new HashMap <Long, Zone>();
 
 	/**
 	 * Constructor
@@ -307,12 +307,17 @@ public class Bootstrap extends Peer {
 	 * @return
 	 */
 	public ArrayList<String> getPaths(String username) {
-		String path;
+		String path = "";
 		ArrayList<String> filteredList = getListOfImages(username);
 		ArrayList<String> paths = new ArrayList<String>();
 		//TODO forwarding to the peers
 		for(String imageName : filteredList) {
-			path = "http://" + getIP() + "//images//" + imageName;
+			try {
+				path = "http://" + getIP() + "//images//" + imageName;
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			paths.add(path);
 		}
 		return paths;
