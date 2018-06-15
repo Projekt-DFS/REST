@@ -19,137 +19,147 @@ import java.awt.Image;
 public class ImageContainer implements Serializable {
 
 	private static final long serialVersionUID = 4903375720434123881L;	//TODO was ist das?
+	//Liste mit keys von Bildern
+	
 	//Variables
-		transient private BufferedImage img;
-		transient private BufferedImage thumbnail;
-		private String fileName;
-		private String imgPath;
-		private String thumbnailPath;
-		private Point2D.Double canCoordinate;
-		
-		
-		//Meta-Data
-		private String photographer;
-		private User user;
-		private Date date;
-		//private Ort location;
-		private LinkedList<String> tagList;
-		//TODO Location implementieren
+	transient private BufferedImage img;
+	transient private BufferedImage thumbnail;
+	
+	private String imageName;
+	private String path;
+	private Point2D.Double coordinate;
+	
+	
+	//Meta-Data
+	private User user;
+	private String username;
+	private Date date;
+	private String location;
+	private LinkedList<String> tagList;
+	//TODO Location implementieren
 
 		
+	/**
+	 * Constructor
+	 * Sets image object
+	 */
+	public ImageContainer(BufferedImage img, String username, String imageName, 
+			String location, Date date, LinkedList<String> tagList) {
 		
-		/**
-		 * Constructor
-		 * Sets image object
-		 */
-		public ImageContainer(BufferedImage img, Point2D.Double canCoordinate,
-				String photographer, User user, Date date, LinkedList<String> tagList) {
-			
-			setImage(img);
-			setFileName(fileName);
-			setCoordinate(canCoordinate);
-			
-			tagList = new LinkedList<String>();
-			setPhotographer(photographer);
-			setUser(user);
-			setDate(date);
-			setTagList(tagList);
-			setPath();
-			
-		}
+		setImage(img);
+		setFileName(imageName);
+		setCoordinate();
+		
+		tagList = new LinkedList<String>();
+		setLocation(location);
+		setUsername(username);
+		setDate(date);
+		setTagList(tagList);
+		setPath();
+		
+	}
+		
 
 		
 		
 		// get-methods
-		public BufferedImage getImage() {
-			return img;
-		}
+	public BufferedImage getImage() {
+		return img;
+	}
+	
+	public BufferedImage getThumbnail() {
+		return thumbnail;
+	}
+	
+	public String getImageName() {
+		return imageName;
+	}
+	
+	public Point2D.Double getCoordinate() {
+		return coordinate;
+	}
+	
+	public String getPath() {
+		//TODO
+		return path;
+	}
+	
+	public String getThumbnailPath() {
+		//TODO
+		return path;
+	}
+	
+	// get-methods meta
+	public User getUser() {
+		return user;
+	}
+	
+	public String getLocation() {
+		return location;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	
 		
-		public BufferedImage getThumbnail() {
-			return thumbnail;
-		}
-		
-		public String getFileName() {
-			return fileName;
-		}
-		
-		public Point2D.Double getCoordinate() {
-			return canCoordinate;
-		}
-		
-		public String getImgPath() {
-			return imgPath;
-		}
-		
-		public String getThumbnailPath() {
-			return thumbnailPath;
-		}
-		
-		// get-methods meta
-		public String getPhotographer() {
-			return photographer;
-		}
-		
-		public User getUser() {
-			return user;
-		}
-			
-		public Date getDate() {
-			return date;
-		}
-		
-		public String getTagList () {
-			return tagList.toString();
-		}
+	public Date getDate() {
+		return date;
+	}
+	
+	public String getTagList () {
+		return tagList.toString();
+	}
 
 
 
 		//set-methods
-		public void setImage(BufferedImage img) {
-			this.img = img;
-			
-			if(!img.equals(null) ) {
-				createThumbnail(img);
-			}
-		}
+	public void setImage(BufferedImage img) {
+		this.img = img;
 		
-		public void setFileName(String fileName) {
-			this.fileName = fileName;
+		if(!img.equals(null) ) {
+			createThumbnail(img);
 		}
+	}
+	
+	public void setFileName(String imageName) {
+		this.imageName = imageName;
+	}
+	
+	public void setCoordinate() {
+		coordinate = StaticFunctions.hashToPoint(username, imageName);
 		
-		public void setCoordinate(Point2D.Double canCoordinate) {
-			if (canCoordinate.x > 1.0 || canCoordinate.y > 1.0 || canCoordinate.x < 0.0 || canCoordinate.y < 0.0) {
-				throw new IllegalArgumentException("Bad Coordinate");
-			} else {
-				this.canCoordinate= canCoordinate;
-			}
-			
-		}
+	}
+	
+	public void setPath() {
+		StringBuffer fileName = new StringBuffer();
+		fileName.append("images/").append(username).append("//")
+		.append(imageName);
 		
-		public void setPath() {
-			StringBuffer fileName = new StringBuffer();
-			fileName.append("Images//").append(user.getName()).append("_")
-					.append(StaticFunctions.pointToString(canCoordinate));
-			this.imgPath = fileName.toString();// + ".jpg";
-			this.thumbnailPath = fileName.toString() + "_thumbnail.jpg";
-		}
 		
-		//set-methods meta
-		public void setPhotographer(String photographer) {
-			this.photographer = photographer;
-		}
-		
-		public void setUser(User user) {
-			this.user = user;
-		}
-		
-		public void setDate(Date date) {
-			this.date = date;
-		}
-		
-		public void setTagList(LinkedList<String> tagList) {
-			this.tagList = tagList;
-		}
+		this.path = fileName.toString();
+	}
+	
+	//set-methods meta
+	public void setLocation(String location) {
+		this.location= location;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	
+	public void setTagList(LinkedList<String> tagList) {
+		this.tagList = tagList;
+	}
 
 		
 		
@@ -214,7 +224,7 @@ public class ImageContainer implements Serializable {
 		 * @param img the original image
 		 */
 		private void createThumbnail(BufferedImage img) {
-			Image temp = img.getScaledInstance(img.getWidth() / 10, img.getHeight() / 10, BufferedImage.SCALE_DEFAULT);
+			Image temp = img.getScaledInstance(img.getWidth() / 10, img.getHeight() / 10, BufferedImage.SCALE_SMOOTH);
 			thumbnail = StaticFunctions.toBufferedImage(temp);
 		}
 	

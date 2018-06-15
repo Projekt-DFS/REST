@@ -1,9 +1,7 @@
 package de.htwsaar.dfs.model;
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-import de.htwsaar.dfs.exceptions.*;
+import de.htwsaar.dfs.exceptions.EmptyStringException;
 
 /**
  * 
@@ -13,29 +11,26 @@ import de.htwsaar.dfs.exceptions.*;
  * @author Thomas Spanier
  *
  */
-@XmlRootElement
 public class User implements Serializable {
 
 	
 	//TODO Serializable???
 	private static final long serialVersionUID = -3153801662101748013L;
 	//Variables
-	private int id;
+	private long id;
 	private String name;
 	private String password;
 	//imageList?
 	
-	public User() {
-		
-	}
+	
 	/**
 	 * Constructor
 	 * @param id
 	 * @param name
 	 * @param password
 	 */
-	public User(int id, String name, String password) {
-	//public User(String name, String password) {
+	//public User(int id, String name, String password) {
+	public User(long id, String name, String password) {
 		//TODO id sinnvoll?
 		this.id=id;
 		setName(name);
@@ -43,7 +38,7 @@ public class User implements Serializable {
 	}
 	
 	//get-methods
-	public int getID() {
+	public long getID() {
 		return id;
 	}
 	
@@ -55,10 +50,10 @@ public class User implements Serializable {
 		return password;
 	}
 	
+	
 	//set-methods
-	public void setID(int id) {
-		this.id = id;
-	}
+	
+	
 	
 	public void setName(String name) {
 		if (name.trim().isEmpty()) {
