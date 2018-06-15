@@ -7,14 +7,50 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Zone {
     private Point2D.Double bottomLeft, bottomRight, upperLeft, upperRight, center;
     private Interval leftY, rightY, bottomX, upperX;
-    
+  
     public Zone() {
     
     }
     
     //Konstruktor
     
-    public Zone(Point2D.Double bottomLeft, Point2D.Double bottomRight, Point2D.Double upperLeft, Point2D.Double upperRight) {
+    public void setBottomLeft(Point2D.Double bottomLeft) {
+		this.bottomLeft = bottomLeft;
+	}
+
+	public void setBottomRight(Point2D.Double bottomRight) {
+		this.bottomRight = bottomRight;
+	}
+
+	public void setUpperLeft(Point2D.Double upperLeft) {
+		this.upperLeft = upperLeft;
+	}
+
+	public void setUpperRight(Point2D.Double upperRight) {
+		this.upperRight = upperRight;
+	}
+
+	public void setCenter(Point2D.Double center) {
+		this.center = center;
+	}
+
+	public void setLeftY(Interval leftY) {
+		this.leftY = leftY;
+	}
+
+	public void setRightY(Interval rightY) {
+		this.rightY = rightY;
+	}
+
+	public void setBottomX(Interval bottomX) {
+		this.bottomX = bottomX;
+	}
+
+	public void setUpperX(Interval upperX) {
+		this.upperX = upperX;
+	}
+
+	public Zone(Point2D.Double bottomLeft, Point2D.Double bottomRight, Point2D.Double upperLeft, Point2D.Double upperRight) {
     	this.bottomLeft = bottomLeft;
     	this.bottomRight = bottomRight;
     	this.upperLeft = upperLeft;
@@ -60,6 +96,8 @@ public class Zone {
     public Point2D.Double getUpperLeft() {
         return upperLeft;
     }
+    
+    
     
     public Point2D.Double getBottomLeft() {
         return bottomLeft;
@@ -126,7 +164,19 @@ public class Zone {
     @XmlRootElement
     public class Interval {
     	private double min;
-    	private double max;
+    	public void setMin(double min) {
+			this.min = min;
+		}
+
+		public void setMax(double max) {
+			this.max = max;
+		}
+
+		public void setAnchor(double anchor) {
+			this.anchor = anchor;
+		}
+
+		private double max;
     	private double anchor;
     	
     	public Interval() {
