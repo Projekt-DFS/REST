@@ -6,7 +6,9 @@ import java.net.URI;
 import java.awt.geom.Point2D;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -28,9 +30,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @XmlRootElement
 public class Peer {
-	
-	
-	
 	//Variablen
 	public Zone ownZone;
 	public static final int port = 4434;
@@ -42,12 +41,111 @@ public class Peer {
 	@XmlTransient
 	public InetAddress inet;
 	
-//	private  HashMap neighbours = new HashMap();
-	public HashMap <Long, Zone> coordinates = new HashMap <Long, Zone>();
-    
-
-
-
+	private LinkedList<Peer> routingTable = new LinkedList<Peer>();
+	
+	
+	
+	   /**
+	    * Splits the Peer's Zone and transfers one half to the new Peer
+	    * @param newPeer
+	    */
+	public Peer splitZone(Peer newPeer) {
+	    if (ownZone.isSquare()) {
+	        
+	    	newPeer.createZone(new Point2D.Double(ownZone.calculateCentrePoint().getX(), ownZone.getBottomRight().getY()), ownZone.getUpperRight());
+	        ownZone.setZone(ownZone.getBottomLeft(), new Point2D.Double(ownZone.calculateCentrePoint().getX(), ownZone.getUpperLeft().getY()));    
+	    } else {
+	        
+	    	newPeer.createZone(ownZone.getBottomLeft(), (new Point2D.Double(ownZone.getBottomRight().getX(), ownZone.calculateCentrePoint().getY())));
+	        ownZone.setZone(new Point2D.Double(ownZone.getUpperLeft().getX(), ownZone.calculateCentrePoint().getY()), ownZone.getUpperRight());    
+	    }
+	    
+	    updateRoutingTables(newPeer);
+	    
+	    return newPeer;
+	}
+	
+	// Methods for routingTable updating
+	
+	/**
+	 * updates routingTables of all Peers affected
+	 * @param newPeer
+	 */
+	public void updateRoutingTables(Peer newPeer) {
+		// oldPeer becomes neighbour of new Peer
+	    newPeer.mergeRoutingTableSinglePeer(this);
+	    
+	    // newPeer gets the routingTable from oldPeer
+	    newPeer.mergeRoutingTableWithList(routingTable);
+	    
+	    // newPeer becomes neighbour of oldPeer
+	    this.mergeRoutingTableSinglePeer(newPeer);
+	   
+	    /**
+	     * each Peer of oldPeer's routingTable gets newPeer as a temporary neighbour
+	     * Peers from oldPeer's old routingTable check if oldPeer and newPeer are neighbours
+	     * if not, they are removed from the routingTable
+	     */
+	    
+	    for (Peer p : routingTable) {
+	    	p.mergeRoutingTableSinglePeer(newPeer);
+	    	
+	    	if (p.isNeighbour(this) == false) {
+	    		p.getRoutingTable().remove(this);
+	    	}
+	    	
+	    	if (p.isNeighbour(newPeer) == false) {
+	    		p.getRoutingTable().remove(newPeer);
+	    	}
+	    }
+	    
+	    eliminateNeighbours(this);
+	    eliminateNeighbours(newPeer);
+	}
+	
+	/**
+	 * a single Peer is put into the routingTable
+	 * @param potentialNeighbour
+	 */
+	public void mergeRoutingTableSinglePeer(Peer potentialNeighbour) {
+		routingTable.add(potentialNeighbour);
+	}
+	
+	/**
+	 * a neighbour's routingTable is merged into the Peer's routingTable
+	 * @param neighboursRoutingTable
+	 */
+	public void mergeRoutingTableWithList(LinkedList<Peer> neighboursRoutingTable) {
+		routingTable.addAll(neighboursRoutingTable);
+	}
+	
+	/**
+	 * eliminates neighbours from routingTable if isNeighbour() returns false
+	 * @param peer
+	 */
+	public void eliminateNeighbours(Peer peer) {
+		peer.getRoutingTable().parallelStream().forEach( p-> {
+			if(peer.isNeighbour(p) == false) {
+				peer.getRoutingTable().remove(p);
+			}
+		});
+	}
+	
+	public String routingTableToString() {
+		StringBuilder sb = new StringBuilder();
+		
+		try {
+			for (Peer p : routingTable) {
+				sb.append(p.getIP()).append(" ").append(p.getZone()).append(System.lineSeparator());
+			}
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		return sb.toString();	
+	}
+	
+	
 	public Zone getOwnZone() {
 		return ownZone;
 	}
@@ -70,14 +168,6 @@ public class Peer {
 
 	public void setInet(InetAddress inet) {
 		this.inet = inet;
-	}
-
-	public HashMap<Long, Zone> getCoordinates() {
-		return coordinates;
-	}
-
-	public void setCoordinates(HashMap<Long, Zone> coordinates) {
-		this.coordinates = coordinates;
 	}
 
 	public int getId() {
@@ -139,16 +229,13 @@ public class Peer {
 		
 	}
 	
-	
-
 	public Peer() {
 			
-		
 	}
 	
 	/**
 	 * 
-	 * @return the local ip-adress of the peer
+	 * @return the local ip-address of the peer
 	 * @throws UnknownHostException 
 	 */
 	
@@ -167,9 +254,10 @@ public class Peer {
 	 * @param key IP-Adresse from the a neighbor of the peer
 	 * @param zone zone-responsibility of the neighbor
 	 */
+	/**
 	public void createCoordinates(Long key, Zone zone) {
 		coordinates.put(key, zone);
-	}
+	}*/
 	
 	
 	
@@ -228,22 +316,7 @@ public class Peer {
         ownZone.setZone(bottomLeft, upperRight);
     }
     
-   /**
-    * Splits the Peer's Zone and transfers an half to the new Peer
-    * @param newPeer
-    */
-    public Peer splitZone(Peer newPeer) {
-        if (ownZone.isSquare()) {
-        	
-        	
-            newPeer.createZone(new Point2D.Double(ownZone.calculateCentrePoint().getX(), ownZone.getBottomRight().getY()), ownZone.getUpperRight());
-            ownZone.setZone(ownZone.getBottomLeft(), new Point2D.Double(ownZone.calculateCentrePoint().getX(), ownZone.getUpperLeft().getY()));    
-        } else {
-            newPeer.createZone(ownZone.getBottomLeft(), (new Point2D.Double(ownZone.getBottomRight().getX(), ownZone.calculateCentrePoint().getY())));
-            ownZone.setZone(new Point2D.Double(ownZone.getUpperLeft().getX(), ownZone.calculateCentrePoint().getY()), ownZone.getUpperRight());    
-        }
-        return newPeer;
-    }
+   
     
     /**
      * Prints the Peer's Zone
@@ -269,20 +342,17 @@ public class Peer {
     	return ownZone.getZoneVolume();
     }
     
-   
-    
-    /**
+     /**
      * Generates a random Point in the Coordinate system
-     * @return
+     * @return randomPoint in the coordinate space
      */
     public Point2D.Double generateRandomPoint() {
     	Point2D.Double randomPoint = new Point2D.Double(Math.random(), Math.random());
     	return randomPoint;
     }
    
-    
-    public ArrayList<Integer> getNeighbourList(){
-    	return neighbourList;
+    public LinkedList<Peer> getRoutingTable() {
+    	return routingTable;
     }
     
     public boolean isNeighbour(Peer potentialNeighbour) {
