@@ -3,6 +3,7 @@ package de.htwsaar.dfs;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -31,7 +32,7 @@ import java.util.Random;
  */
 public class Main {
 	
-
+	public static String ip;
 
     // Base URI the Grizzly HTTP server will listen on
    //"http://localhost:8080/iosbootstrap/v1/";
@@ -50,6 +51,7 @@ public class Main {
         rc.register(MultiPartFeature.class);
         rc.register(LoggingFilter.class);
         rc.register(SecurityFilter.class);
+        rc.register(JacksonFeature.class);
 
                
         // create and start a new instance of grizzly http server
@@ -63,10 +65,11 @@ public class Main {
 		users.put( 1, new User(1, "user", "user"));
 		users.put( 2, new User(2, "User", "password"));
 		
-		String imgesHttpURL = "https://picsum.photos/1200/300?image=";
-		String thumbnailHttpURL ="https://picsum.photos/200/200?image=";
+		String imgesHttpURL = "http://"+ip+"/images/";
+		String thumbnailHttpURL ="http://"+ip+"/images/";
 	    
-		String[] locations = {"Berlin", "Yaounde", "Milan" , "Paris" , "Saarbrucken"};
+		String[] locations =
+			{"Berlin", "Yaounde", "Milan" , "Paris" , "Saarbrucken"};
 		String[] tags = {"Hochzeit", "Urlaub","Urlaub2017"};
 		for ( long j=1; j<150 ; j++) {
 			int uid = (int)(j%2)+1;
@@ -82,7 +85,8 @@ public class Main {
 	}
     
     static public String getIP() throws UnknownHostException {
-    	return InetAddress.getLocalHost().getHostAddress();
+    	return ip;
+    	//return InetAddress.getLocalHost().getHostAddress();
     }
     
     /**
@@ -91,6 +95,7 @@ public class Main {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
+    	ip = args[0];
     	putInDb();
         startServer();
        

@@ -30,6 +30,7 @@ public class ImageResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Image> getListOfImages(@PathParam("userId") int id){
+		System.out.println("test");
 		return imageService.getAllImages(id);
 	}
 	
@@ -43,7 +44,6 @@ public class ImageResource {
 	@Produces(MediaType.APPLICATION_JSON )
 	public Image addImage(@PathParam("userId") int userId, Image image) {
 		imageService.addImage(userId, image);
-		System.out.println(image.getImageSource());
 		return image;
 		
 	}
