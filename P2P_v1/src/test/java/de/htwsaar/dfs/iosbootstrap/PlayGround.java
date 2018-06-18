@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -36,128 +37,63 @@ public class PlayGround {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		//new PlayGround().startBootstrapTest();
 		//new PlayGround().startUserTest();
-		new PlayGround().startImageTest();
-		//new PlayGround().startCanTest();
-	}
-	
-	
-	private void startCanTest() {
-		bt = new Bootstrap();
-		Peer p1 = new Peer(bt);
-		System.out.println(p1.toStringZone());
-	}
-	
-	
-	
-	//Image Playground
-	private void startImageTest() {
-		testSaveImage();
-		testLoadImage();
-	}
-	
-	private void testSaveImage() {
-		ImageContainer ic;
-		bt = new Bootstrap();
-		BufferedImage img;
+		//new PlayGround().startImageTest();
 		try {
-			
-			img = ImageIO.read(new File("Classdiagramm.jpg"));
-			String photographer = "Knecht";
-			User owner = new User(1,"user1", "pw");
-			Date date = new Date();
-			LinkedList<String> tagList = new LinkedList<String>();
-			bt.createImage(img, owner.getName(),"img_001", photographer, date, tagList);
-			
-			ArrayList<String> paths = bt.getPaths("user1");
-			System.out.println(paths.size());
-			
-		} catch (IOException e) {
+			new PlayGround().startBootstrapTest();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	private void testLoadImage() {
-		ImageContainer ic;
+	private void startBootstrapTest() throws IOException {
+		//startBootstrapTestCreate();
+		startBootstrapTestLoad();
+	}
+	
+	private void startBootstrapTestCreate() throws IOException {
 		bt = new Bootstrap();
-		Point2D.Double coordinate = new Point2D.Double(0.5, 0.8);
-		User owner = new User(1,"user1", "pw");
+		System.out.println(bt.createUser("test1", "test1"));
+		System.out.println(bt.createUser("test2", "lol"));
+		System.out.println(bt.getAllUsers());
 		
-		try {
-			ic = bt.loadImageContainer(owner.getName(), "img_001");
-			System.out.println(ic.getCoordinate());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		BufferedImage img = ImageIO.read(new File("Classdiagramm.jpg"));
+		String photographer = "Knecht";
+		Date date = new Date();
+		LinkedList<String> tagList = new LinkedList<String>();
+		bt.createImage(img, bt.getUser("test1").getName(), "img_001", photographer, date, tagList);
 		
+		img = ImageIO.read(new File("myfile.jpg"));
+		photographer = "Mario";
+		tagList.add("Küche");
+		bt.createImage(img, bt.getUser("test2").getName(), "img_001", photographer, date, tagList);
 		
-		
+		img = ImageIO.read(new File("k-01.jpg"));
+		photographer = "amazon";
+		tagList.removeFirst();
+		tagList.add("Kaufbelege");
+		tagList.add("weiß");
+		bt.createImage(img, bt.getUser("test2").getName(), "img_002", photographer, date, tagList);
+		System.out.println(bt.getPaths("test2"));
 	}
 	
 	
-	
-	
-	//Peer & Bootstrap Playground
-	private void startBootstrapTest() {
-		Bootstrap booty = new Bootstrap();
-		
-	}
-	
-	
-	
-	
-	//User Playground
-	private void startUserTest() {
-		testExport();
-		testImport();
-		testDelete();
-	}
-	
-	private void testDelete() {
+	private void startBootstrapTestLoad() throws UnknownHostException {
 		bt = new Bootstrap();
-		bt.createUser("0", "0");
-		bt.createUser("1", "1");
+		System.out.println(bt.getPaths("test2"));
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
-		System.out.println(bt.getAllUsers());
-		bt.deleteUser("0");
-		System.out.println(bt.getAllUsers());
-	}
-	
-	private void testExport() {
-		bt = new Bootstrap();
-		bt.createUser("0", "0");
-		bt.createUser("1", "1");
-		
-		try {
-			bt.exportUserList();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	
-	private void testImport() {
-		bt = new Bootstrap();
-		
-		try {
-			bt.importUserList();
-		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		System.out.println(bt.getAllUsers());
-		System.out.println(bt.authenticateUser("0", "0"));
-		System.out.println(bt.authenticateUser("1", "1"));
-		
-	}
 	
 }

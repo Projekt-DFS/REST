@@ -1,5 +1,6 @@
 package de.htwsaar.dfs.model;
 import java.io.Serializable;
+import java.util.HashSet;
 
 import de.htwsaar.dfs.exceptions.EmptyStringException;
 
@@ -18,16 +19,9 @@ public class User implements Serializable {
 	private static final long serialVersionUID = -3153801662101748013L;
 	//Variables
 	private long id;
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
 	private String name;
 	private String password;
+	private HashSet<String> imageList;
 	//imageList?
 	
 	
@@ -40,11 +34,16 @@ public class User implements Serializable {
 	//public User(int id, String name, String password) {
 	public User(long id, String name, String password) {
 		//TODO id sinnvoll?
+		imageList = new HashSet<String>();
 		this.id=id;
 		setName(name);
 		setPassword(password);
 	}
-
+	
+	//get-methods
+	public long getId() {
+		return id;
+	}
 	
 	public String getName() {
 		return name;
@@ -54,10 +53,16 @@ public class User implements Serializable {
 		return password;
 	}
 	
+	public HashSet<String> getImageList() {
+		return imageList;
+	}
+	
 	
 	//set-methods
 	
-	
+	public void setId(long id) {
+		this.id = id;
+	}
 	
 	public void setName(String name) {
 		if (name.trim().isEmpty()) {
@@ -73,6 +78,15 @@ public class User implements Serializable {
 		}
 		this.password=password;
 	}
+	
+	public void insertIntoImageList(String imageName) {
+		imageList.add(imageName);
+	}
+	
+	public void deleteFromImageList(String imageName) {
+		imageList.removeIf(s -> s.equals(imageName));
+	}
+	
 
 	/**
 	 * ToString method

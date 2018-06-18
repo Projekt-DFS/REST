@@ -14,12 +14,10 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
 import de.htwsaar.dfs.model.User;
-import de.htwsaar.dfs.utils.StaticFunctions;
 
 
 
@@ -27,15 +25,15 @@ public class Bootstrap extends Peer {
 
 	//Variables
 	private ArrayList<User> userList;
-	long userCount;
-	private HashSet<String> imageList;				//Form: <username>|<imageName>
+	private long userCount;
+	//private HashSet<String> imageList;				//Form: <username>|<imageName>
 	//private Zone initialZone;
 	
 	/**
 	 * HashMap: Speichert die Nachbarn vom Peer mit zugehöhrigen Zonen
 	 * 
 	 */
-	//private  HashMap <Long, Zone> coordinates = new HashMap <Long, Zone>();
+	private  HashMap <Long, Zone> coordinates = new HashMap <Long, Zone>();
 
 	/**
 	 * Constructor
@@ -45,10 +43,9 @@ public class Bootstrap extends Peer {
 	public Bootstrap() {
 		//Create or load UserList
 		userList = new ArrayList<User>();
-		imageList = new HashSet<String>();
 		try {
-			loadUserCount();
-			importUserList();
+			userCount = loadUserCount();
+			userList = importUserList();
 		} catch (FileNotFoundException e){
 			
 		} catch (IOException | ClassNotFoundException e) {
@@ -58,7 +55,6 @@ public class Bootstrap extends Peer {
 		try {
 			this.inet = InetAddress.getLocalHost();
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -73,14 +69,6 @@ public class Bootstrap extends Peer {
 
 	public void setUserList(ArrayList<User> userList) {
 		this.userList = userList;
-	}
-
-	public HashSet<String> getImageList() {
-		return imageList;
-	}
-
-	public void setImageList(HashSet<String> imageList) {
-		this.imageList = imageList;
 	}
 
 	public void setUserCount(long userCount) {
@@ -98,7 +86,7 @@ public class Bootstrap extends Peer {
 	 * @return
 	 */
 	public User getUser(long id) {
-		//TODO unschön
+		//TODO 
 		return userList.get((int) id);
 	}
 	
@@ -111,11 +99,10 @@ public class Bootstrap extends Peer {
 	public User getUser(String username) {
 		//TODO: what, if username does not exist?
 		for(User user : userList) {
-			if(user.getName() == username) {
+			if(user.getName().equals(username)) {
 				return user;
 			}
 		}
-		
 		throw new IllegalArgumentException("User does not exist");
 	}
 	
@@ -129,12 +116,13 @@ public class Bootstrap extends Peer {
 	 */
 	public String createUser(String name, String password) {
 		User newUser;
-		newUser = new User(userCount++, name, password);
+		newUser = new User(userCount, name, password);
 		for(User user : userList) {
 			if(user.getName().equals(name)) {
 				return ("User already exists");
 			}
 		}
+		userCount++;
 		userList.add(newUser);
 		try {
 			exportUserList();
@@ -150,16 +138,15 @@ public class Bootstrap extends Peer {
 	 * Deletes the User
 	 * @param name of the deleting User
 	 */
-	public void deleteUser(String username) {
+	public String deleteUser(String username) {
 		User user = getUser(username);
 		//TODO: Delete all photos from user
 		userList.remove(user);
-		
 		try {
 			exportUserList();
+			return "User successfully deleted";
 		} catch (IOException e) {
-			 //TODO Auto-generated catch block
-			System.out.println("noooooo");
+			return "User not found";
 		}
 	}
 
@@ -171,7 +158,6 @@ public class Bootstrap extends Peer {
 	 */
 	public boolean authenticateUser(String name, String password) {
 		for(User user : userList) {
-
 			if(user.getName().equals(name) && user.getPassword().equals(password)) {
 				return true;
 			} 
@@ -180,7 +166,7 @@ public class Bootstrap extends Peer {
 	}
 
 	/**
-	 * 
+	 * returns a List with all Users
 	 * @return a List with all Users
 	 */
 	public String getAllUsers() {
@@ -192,7 +178,7 @@ public class Bootstrap extends Peer {
 	}
 
 	/**
-	 * 
+	 * returns how many Users are registered
 	 * @return how many Users are registered
 	 */
 	public int getUserCount() {
@@ -208,6 +194,14 @@ public class Bootstrap extends Peer {
 	 */
 	public void dumpUsers() {
 		userList.removeAll(userList);
+		userCount = 0;
+		try {
+			exportUserList();
+			saveUserCount();
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 
@@ -231,15 +225,15 @@ public class Bootstrap extends Peer {
 	 * @throws FileNotFoundException if userList.dat does not exist
 	 */
 	@SuppressWarnings("unchecked")
-	public void importUserList() throws IOException, ClassNotFoundException, FileNotFoundException {
+	public ArrayList<User> importUserList() throws IOException, ClassNotFoundException, FileNotFoundException {
 		ObjectInputStream in;
-		userList = new ArrayList<User>();
+		ArrayList<User> tmpUserList = new ArrayList<User>();
 		in= new ObjectInputStream(
 				new BufferedInputStream(
 						new FileInputStream("userList.dat")));
-		userList= (ArrayList<User>)in.readObject();
+		tmpUserList= (ArrayList<User>)in.readObject();
 		in.close();
-
+		return tmpUserList;
 	}
 	
 	/**
@@ -295,11 +289,13 @@ public class Bootstrap extends Peer {
 	public void createImage(BufferedImage img, String username, String imageName, 
 			String photographer, Date date, LinkedList<String> tagList) {
 		
-		String imageID = username + "|" + imageName;
+		User user = getUser(username);
 		ImageContainer ic = new ImageContainer(img, username, imageName, photographer, date, tagList);
-		imageList.add(imageID);
-		//TODO Weiterleiten an die peers
+		user.insertIntoImageList(imageName);
+		
+		//TODO routing
 		try {
+			exportUserList();							//Updates the UserList, incl Link to new Image
 			saveImageContainer(ic);						//TODO: temporary (routing)
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -308,36 +304,33 @@ public class Bootstrap extends Peer {
 
 	}
 
+
 	/**
-	 * TODO uses the imageList to search and filter all images in network
+	 * Uses the User's imageList to search and filter all images in network
 	 * @param username the image's owner
-	 * @return a List with paths of all images from an user
+	 * @return a List with paths of all images of an user
 	 */
-	private ArrayList<String> getListOfImages(String username){
-		//Creates a filtered List with all Images from the user
-		List<String> paths = imageList.stream().
+	private HashSet<String> getListOfImages(String username){
+		/*List<String> paths = imageList.stream().
 				filter(s -> s.startsWith(username+ "|")).collect(Collectors.toList());
-		
-		return (ArrayList<String>) paths;
+		*/
+		return getUser(username).getImageList();
 	}
-	
+
+
 	/**
 	 * returns a List with all paths to the images
-	 * @param username
-	 * @return
+	 * @param username 
+	 * @return an ArrayList with all paths to the images
+	 * @throws UnknownHostException 
 	 */
-	public ArrayList<String> getPaths(String username) {
-		String path = "";
-		ArrayList<String> filteredList = getListOfImages(username);
+	public ArrayList<String> getPaths(String username) throws UnknownHostException {
+		String path;
+		HashSet<String> imageList = getListOfImages(username);
 		ArrayList<String> paths = new ArrayList<String>();
 		//TODO forwarding to the peers
-		for(String imageName : filteredList) {
-			try {
-				path = "http://" + getIP() + "//images//" + imageName;
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		for(String imageName : imageList) {
+			path = "http://" + getIP() + "//images//" + username + "//" + imageName;
 			paths.add(path);
 		}
 		return paths;
@@ -391,19 +384,17 @@ public class Bootstrap extends Peer {
 	 */
 	public void saveImageContainer(ImageContainer ic) throws IOException {
 		
-		//Save imageContainer
+		//Create folders if they do not already exist
 		File folder = new File("images");
-		
 		if(!folder.exists()) {
 			folder.mkdir();
 		}
-		
 		File userFolder = new File("images//" + ic.getUsername());
 		if(!userFolder.exists()) {
 			userFolder.mkdir();
 		}
 		
-		
+		//Save imageContainer
 		ObjectOutputStream out = new ObjectOutputStream(
 				new BufferedOutputStream(
 						new FileOutputStream(ic.getPath() + ".data")));
@@ -429,13 +420,12 @@ public class Bootstrap extends Peer {
 	 */
 	public ImageContainer loadImageContainer(String username, String imageName) throws FileNotFoundException, IOException, ClassNotFoundException {
 		//TODO routing
-		Point2D.Double coordinate = StaticFunctions.hashToPoint(username, imageName);
+		//Point2D.Double coordinate = StaticFunctions.hashToPoint(username, imageName);
 		
 		//Get location
 		StringBuffer fileName = new StringBuffer();
-		fileName.append("Images//").append(username).append(",")
+		fileName.append("images//").append(username).append("//")
 				.append(imageName);
-		
 		//Load image
 		File inputFile = new File(fileName.toString() + ".jpg");
 		BufferedImage img = ImageIO.read(inputFile);
