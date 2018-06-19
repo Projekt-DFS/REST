@@ -18,7 +18,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.htwsaar.dfs.can_network.Bootstrap;
-import de.htwsaar.dfs.model.User;
 
 public class ImageTest {
 
@@ -39,20 +38,21 @@ public class ImageTest {
 		
 		BufferedImage img = ImageIO.read(new File("Classdiagramm.jpg"));
 		String photographer = "Knecht";
-		User owner = new User(1,"user1", "pw");
+		//User owner = new User(1,"user1", "pw");
+		bt.createUser("user1", "pw");
 		Date date = new Date();
 		LinkedList<String> tagList = new LinkedList<String>();
 		tagList.add("Sommer2017");
-		bt.createImage(img, owner.getName(),"img_001", photographer, date, tagList);
+		bt.createImage(img, "user1","img_001", photographer, date, tagList);
 		
-		img = ImageIO.read(new File("Test.jpg"));
+		img = ImageIO.read(new File("twins.jpg"));
 		photographer = "Knecht";
-		owner = new User(2,"Testuser2", "pw");
+		bt.createUser("Testuser2", "pw");
 		date = new Date();
 		tagList = new LinkedList<String>();
 		tagList.add("Winter2018");
-		bt.createImage(img, owner.getName(),"img_002", photographer, date, tagList);
-		
+		bt.createImage(img, "Testuser2","img_002", photographer, date, tagList);
+		System.out.println(bt.loadImageContainer("TestUser2", "img_002").getTagList());
 		
 		
 	}
@@ -63,19 +63,29 @@ public class ImageTest {
 
 	@Test
 	public void testImageList() {
-		ArrayList<String> paths = bt.getPaths("user1");
-		String ip ="";
+		ArrayList<String> paths;
 		try {
-			ip = bt.getIP();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(paths.get(0).toString());
-		assertEquals(1, paths.size());
-		assertEquals("http://" + ip + "//images//user1|img_001", paths.get(0).toString());
+			paths = bt.getPaths("user1");
 		
-		assertEquals(1, bt.getPaths("Testuser2").size());
+			String ip ="";
+			try {
+				ip = bt.getIP();
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println(paths.get(0).toString());
+			assertEquals(1, paths.size());
+			assertEquals("http://" + ip + "//images//user1//img_001", paths.get(0).toString());
+			
+			assertEquals(1, bt.getPaths("Testuser2").size());
+			LinkedList<String> tmpList = new LinkedList<String>();
+			tmpList.add("Winter2018");
+			assertEquals(tmpList, bt.loadImageContainer("TestUser2", "img_002").getTagList());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 }

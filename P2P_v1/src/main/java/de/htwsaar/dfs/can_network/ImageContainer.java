@@ -46,14 +46,17 @@ public class ImageContainer implements Serializable {
 	public ImageContainer(BufferedImage img, String username, String imageName, 
 			String location, Date date, LinkedList<String> tagList) {
 		
+		
+		
+		
 		setImage(img);
 		setFileName(imageName);
 		setCoordinate();
 		
-		tagList = new LinkedList<String>();
 		setLocation(location);
 		setUsername(username);
 		setDate(date);
+		this.tagList = new LinkedList<String>();
 		setTagList(tagList);
 		setPath();
 		
@@ -107,7 +110,12 @@ public class ImageContainer implements Serializable {
 		return date;
 	}
 	
-	public String getTagList () {
+	public LinkedList<String> getTagList() {
+		return tagList;
+	}
+	
+	public String getTags() {
+		
 		return tagList.toString();
 	}
 
@@ -158,7 +166,9 @@ public class ImageContainer implements Serializable {
 	}
 	
 	public void setTagList(LinkedList<String> tagList) {
-		this.tagList = tagList;
+		for(String tag : tagList) {
+			this.tagList.add(tag);
+		}
 	}
 
 		

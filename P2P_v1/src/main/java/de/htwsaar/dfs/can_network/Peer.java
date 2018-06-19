@@ -170,14 +170,6 @@ public class Peer {
 		this.inet = inet;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public static int getPort() {
 		return port;
 	}
@@ -191,28 +183,27 @@ public class Peer {
 	}
 
 	private ArrayList<Integer> neighbourList;				//Fill
-	protected int id;										//TODO useful? for Neighbourlist
-
+	
 	
 	public Zone getZone() {
 		return ownZone;
 	}
 	
 	//Constructor
-		public Peer(Zone tmpZone) {
-				this.ownZone = tmpZone;
-				
-			 try {
-				this.inet = InetAddress.getLocalHost();
-			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			 System.out.println(inet.getHostAddress());
-			//ip_adresse = this.inet.toString();
-				
+	public Peer(Zone tmpZone) {
+		this.ownZone = tmpZone;
 			
+		try {
+			this.inet = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		 System.out.println(inet.getHostAddress());
+		//ip_adresse = this.inet.toString();
+			
+		
+	}
 	//Constructor
 	/**
 	 * Creates a new Peer in oldPeer's Zone
@@ -248,21 +239,6 @@ public class Peer {
 	public void createNeighbours() {
 
 	}
-	
-	/**
-	 * Put values in the Hashmap coordinates
-	 * @param key IP-Adresse from the a neighbor of the peer
-	 * @param zone zone-responsibility of the neighbor
-	 */
-	/**
-	public void createCoordinates(Long key, Zone zone) {
-		coordinates.put(key, zone);
-	}*/
-	
-	
-	
-	
-
 	
 	/**
 	 * Convert a IP-Address(String) to long

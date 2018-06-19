@@ -26,8 +26,6 @@ public class Bootstrap extends Peer {
 	//Variables
 	private ArrayList<User> userList;
 	private long userCount;
-	//private HashSet<String> imageList;				//Form: <username>|<imageName>
-	//private Zone initialZone;
 	
 	/**
 	 * HashMap: Speichert die Nachbarn vom Peer mit zugehöhrigen Zonen
@@ -58,44 +56,37 @@ public class Bootstrap extends Peer {
 			e.printStackTrace();
 		}
 		
-		
 		//Create a new Zone
 		createZone(new Point2D.Double(0.0, 0.0), new Point2D.Double(1.0, 1.0));
 	}
 	
-	public ArrayList<User> getUserList() {
-		return userList;
-	}
-
-	public void setUserList(ArrayList<User> userList) {
-		this.userList = userList;
-	}
-
-	public void setUserCount(long userCount) {
-		this.userCount = userCount;
-	}
-
-	public Bootstrap(Zone tmpZone) {
+	public Bootstrap(Zone tmpZone) {	//TODO was ist das???????
 		super(tmpZone);
 	}
 	
 	
+	//get methods
 	/**
-	 * 
-	 * @param id
-	 * @return
+	 * returns how many Users are registered
+	 * @return how many Users are registered
 	 */
+	public int getUserCount() {
+		int count = 0;
+		for(@SuppressWarnings("unused") User user : userList) {
+			count++;
+		}
+		return count;
+	}
+		
+	public ArrayList<User> getUserList() {
+		return userList;
+	}
+
 	public User getUser(long id) {
 		//TODO 
 		return userList.get((int) id);
 	}
 	
-	
-	/**
-	 * 
-	 * @param username
-	 * @return
-	 */
 	public User getUser(String username) {
 		//TODO: what, if username does not exist?
 		for(User user : userList) {
@@ -106,7 +97,31 @@ public class Bootstrap extends Peer {
 		throw new IllegalArgumentException("User does not exist");
 	}
 	
+	/**
+	 * returns a List with all Users
+	 * @return a List with all Users
+	 */
+	public String getAllUsers() {
+		StringBuffer sb = new StringBuffer();
+		for (User user : userList) {
+			sb.append(user.toString()).append(" | ");
+		}
+		return sb.toString();
+	}
 	
+	
+	//set methods
+	public void setUserList(ArrayList<User> userList) {
+		this.userList = userList;
+	}
+
+	public void setUserCount(long userCount) {
+		this.userCount = userCount;
+	}
+
+	
+	
+	//User management
 	/**
 	 * Creates a new User
 	 * @param id identifier
@@ -138,9 +153,22 @@ public class Bootstrap extends Peer {
 	 * Deletes the User
 	 * @param name of the deleting User
 	 */
+	@SuppressWarnings("unused")
 	public String deleteUser(String username) {
 		User user = getUser(username);
-		//TODO: Delete all photos from user
+		File fileName;
+		//TODO: routing
+		try {
+			for(String imageName : getPaths(username)) {
+				fileName = new File("images//" + username);
+				for(File file: fileName.listFiles()) {
+					file.delete();
+				}
+				System.out.println(fileName.delete());
+			}
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
 		userList.remove(user);
 		try {
 			exportUserList();
@@ -165,29 +193,9 @@ public class Bootstrap extends Peer {
 		return false;
 	}
 
-	/**
-	 * returns a List with all Users
-	 * @return a List with all Users
-	 */
-	public String getAllUsers() {
-		StringBuffer sb = new StringBuffer();
-		for (User user : userList) {
-			sb.append(user.toString()).append(" | ");
-		}
-		return sb.toString();
-	}
+	
 
-	/**
-	 * returns how many Users are registered
-	 * @return how many Users are registered
-	 */
-	public int getUserCount() {
-		int count = 0;
-		for(@SuppressWarnings("unused") User user : userList) {
-			count++;
-		}
-		return count;
-	}
+	
 
 	/**
 	 * Delete all Users
@@ -290,6 +298,7 @@ public class Bootstrap extends Peer {
 			String photographer, Date date, LinkedList<String> tagList) {
 		
 		User user = getUser(username);
+		
 		ImageContainer ic = new ImageContainer(img, username, imageName, photographer, date, tagList);
 		user.insertIntoImageList(imageName);
 		
@@ -345,6 +354,7 @@ public class Bootstrap extends Peer {
 	 */
 	public void getMeta(String username, String fileName) {
 		//TODO implement
+		
 		return;
 	}
 	
@@ -364,13 +374,7 @@ public class Bootstrap extends Peer {
 		//TODO implement
 	}
 	
-	/**
-	 * Sends the ImageContainer's metadata
-	 * @param ic
-	 */
-	public void sendMeta(ImageContainer ic) {
-		//TODO implement
-	}
+	
 	
 
 	

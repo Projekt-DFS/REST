@@ -48,7 +48,7 @@ public class PlayGround {
 	}
 	
 	private void startBootstrapTest() throws IOException {
-		//startBootstrapTestCreate();
+		startBootstrapTestCreate();
 		startBootstrapTestLoad();
 	}
 	
@@ -58,30 +58,42 @@ public class PlayGround {
 		System.out.println(bt.createUser("test2", "lol"));
 		System.out.println(bt.getAllUsers());
 		
-		BufferedImage img = ImageIO.read(new File("Classdiagramm.jpg"));
-		String photographer = "Knecht";
+		BufferedImage img;
+		String photographer;
 		Date date = new Date();
 		LinkedList<String> tagList = new LinkedList<String>();
-		bt.createImage(img, bt.getUser("test1").getName(), "img_001", photographer, date, tagList);
 		
-		img = ImageIO.read(new File("myfile.jpg"));
-		photographer = "Mario";
-		tagList.add("Küche");
+		/*
+		BufferedImage img = ImageIO.read(new File("Classdiagramm.jpg"));
+		String photographer = "Knecht";
+		tagList = new LinkedList<String>();
+		bt.createImage(img, bt.getUser("test1").getName(), "img_001", photographer, date, tagList);
+		*/
+		img = ImageIO.read(new File("twins.jpg"));
+		photographer = "Thomas";
+		tagList.add("babys");
 		bt.createImage(img, bt.getUser("test2").getName(), "img_001", photographer, date, tagList);
 		
-		img = ImageIO.read(new File("k-01.jpg"));
+		img = ImageIO.read(new File("coins.jpg"));
 		photographer = "amazon";
 		tagList.removeFirst();
 		tagList.add("Kaufbelege");
-		tagList.add("weiß");
+		tagList.add("money");
 		bt.createImage(img, bt.getUser("test2").getName(), "img_002", photographer, date, tagList);
 		System.out.println(bt.getPaths("test2"));
+		try {
+			System.out.println("tagList:" + bt.loadImageContainer("test2", "img_002").getTagList());
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
 	private void startBootstrapTestLoad() throws UnknownHostException {
 		bt = new Bootstrap();
 		System.out.println(bt.getPaths("test2"));
+		bt.deleteUser("test1");
 	}
 	
 	
